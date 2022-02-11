@@ -7,42 +7,9 @@
 #include <libxml++/libxml++.h>
 #include <libxml++/parsers/textreader.h>
 
+#include"tmx_data.h"
 
 #include"layer.h"
-
-enum TMX_ELEMENT
-{
-	MAP = 1,
-	TILESET,
-	LAYER,
-	DATA
-};
-
-static std::map<Glib::ustring, TMX_ELEMENT> elementMap = {
-	{ "map", TMX_ELEMENT::MAP },
-	{ "tileset", TMX_ELEMENT::TILESET },
-	{ "layer", TMX_ELEMENT::LAYER },
-	{ "data", TMX_ELEMENT::DATA }
-};
-
-enum MAP_ATTRIBUTE
-{
-	VERSION = 1,
-	TILED_VERSION,
-	WIDTH,
-	HEIGHT,
-	TILE_WIDTH,
-	TILE_HEIGHT
-};
-
-static std::map<Glib::ustring, MAP_ATTRIBUTE> mapAttributeMap = {
-	{ "version", MAP_ATTRIBUTE::VERSION },
-	{ "tiledversion", MAP_ATTRIBUTE::TILED_VERSION },
-	{ "width", MAP_ATTRIBUTE::WIDTH },
-	{ "height", MAP_ATTRIBUTE::HEIGHT },
-	{ "tilewidth", MAP_ATTRIBUTE::TILE_WIDTH },
-	{ "tileheight", MAP_ATTRIBUTE::TILE_HEIGHT }
-};
 
 class Tilemap
 {
@@ -50,7 +17,11 @@ class Tilemap
 		Tilemap(const char *filename);
 		virtual ~Tilemap();
 
-		const Glib::ustring getMapVersion() { return version; }
+		Glib::ustring MapVersion() const { return version; }
+		Glib::ustring TiledVersion() const { return tiledVersion; }
+		uint32_t Width() const { return width; }
+		uint32_t Height() const { return height; }
+		std::vector<Layer> Layers() const { return layers; }
 
 	private:
 		Glib::ustring version;
@@ -61,8 +32,9 @@ class Tilemap
 		uint32_t tileHeight;
 
 		void processMapElement(xmlpp::TextReader&  reader);
+		void processLayerElement(xmlpp::TextReader&  reader);
 
-		std::vector<layer> layers;
+		std::vector<Layer> layers;
 
 		void processNode(xmlpp::TextReader&  reader);
 
@@ -78,6 +50,7 @@ class Tilemap
 
 		GET_ELEMENT(getElement, TMX_ELEMENT, elementMap)
 		GET_ELEMENT(getMapAttribute, MAP_ATTRIBUTE, mapAttributeMap)
+		GET_ELEMENT(getLayerAttribute, LAYER_ATTRIBUTE, layerAttributeMap)
 
 #undef GET_ELEMENT
 };

@@ -1,10 +1,10 @@
 #include "layer.h"
 
-layer::layer()
+Layer::Layer()
 {
 }
 
-layer::~layer()
+Layer::~Layer()
 {
 }
 

@@ -86,7 +86,15 @@ int main(int argc, char **argv)
 
 	try {
 		Tilemap map(args.args[0]);
-		std::cout << "map version: " << map.getMapVersion() << std::endl;
+		std::cout << "map version: " << map.MapVersion() << std::endl;
+		std::cout << "tiled version: " << map.MapVersion() << std::endl;
+		std::cout << "width: " << map.Width() << std::endl;
+		std::cout << "height: " << map.Height() << std::endl;
+
+		for(auto it = map.Layers().cbegin(); it != map.Layers().cend(); ++it)
+		{
+			std::cout << "Layer Width: " << it->Width() << std::endl;
+		}
 	}
 	catch(const std::exception& e)
 	{
