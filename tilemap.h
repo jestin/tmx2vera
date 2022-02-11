@@ -3,8 +3,9 @@
 #include<vector>
 #include<string>
 
-#include <libxml/encoding.h>
-#include <libxml/xmlreader.h>
+#include <libxml++/libxml++.h>
+#include <libxml++/parsers/textreader.h>
+
 
 #include"layer.h"
 
@@ -17,6 +18,6 @@ class Tilemap
 	private:
 		std::vector<layer> layers;
 
-		void processNode(xmlTextReaderPtr reader);
+		void processNode(xmlpp::TextReader&  reader);
 };
 

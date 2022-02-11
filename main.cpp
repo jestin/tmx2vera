@@ -81,7 +81,13 @@ int main(int argc, char **argv)
 	std::cout << "VERBOSE = " << (args.verbose ? "yes" : "no") << std::endl;
 	std::cout << "SILENT = " << (args.silent ? "yes" : "no") << std::endl;
 
-	Tilemap map(args.args[0]);
+	try {
+		Tilemap map(args.args[0]);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << "Exception caught: " << e.what() << std::endl;
+	}
 
 	return 0;
 }

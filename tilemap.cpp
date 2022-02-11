@@ -1,19 +1,29 @@
 #include "tilemap.h"
 
 #include<iostream>
+#include<stdlib.h>
+
+struct indent {
+	int depth_;
+	indent(int depth): depth_(depth) {};
+};
+
+std::ostream & operator<<(std::ostream & o, indent const & in)
+{
+	for(int i = 0; i != in.depth_; ++i)
+	{
+		o << "  ";
+	}
+	return o;
+}
 
 Tilemap::Tilemap(const char *filename)
 {
-	int ret;
-	xmlTextReaderPtr reader;
-	reader = xmlReaderForFile(filename, NULL, 0);
+	xmlpp::TextReader reader(filename);
 
-	if(reader != NULL)
+	while(reader.read())
 	{
-		while((ret = xmlTextReaderRead(reader)) == 1)
-		{
-			processNode(reader);
-		}
+		processNode(reader);
 	}
 }
 
@@ -21,30 +31,31 @@ Tilemap::~Tilemap()
 {
 }
 
-void Tilemap::processNode(xmlTextReaderPtr reader)
+void Tilemap::processNode(xmlpp::TextReader&  reader)
 {
-	const xmlChar *name;
-	const xmlChar *value;
+	int depth = reader.get_depth();
+	std::cout << indent(depth) << "--- node ---" << std::endl;
+	std::cout << indent(depth) << "name: " << reader.get_name() << std::endl;
+	std::cout << indent(depth) << "depth: " << reader.get_depth() << std::endl;
 
-	name = xmlTextReaderConstName(reader);
-
-	if(name == NULL)
-		name = BAD_CAST "--";
-
-	value = xmlTextReaderConstValue(reader);
-
-	std::cout << xmlTextReaderDepth(reader) << " "
-		<< xmlTextReaderNodeType(reader) << " "
-		<< name << " "
-		<< xmlTextReaderIsEmptyElement(reader) << " "
-		<< xmlTextReaderHasValue(reader);
-
-	if(value == NULL)
+	if(reader.has_attributes())
 	{
-		std::cout << std::endl;
+		std::cout << indent(depth) << "attributes: " << std::endl;
+		reader.move_to_first_attribute();
+		do
+		{
+			std::cout << indent(depth) << "  " << reader.get_name() << ": " << reader.get_value() << std::endl;
+		} while(reader.move_to_next_attribute());
+		reader.move_to_element();
 	}
 	else
 	{
-		std::cout << " " << value << std::endl;
+		std::cout << indent(depth) << "no attributes" << std::endl;
 	}
+
+	if(reader.has_value())
+		std::cout << indent(depth) << "value: '" << reader.get_value() << "'" << std::endl;
+	else
+		std::cout << indent(depth) << "novalue" << std::endl;
+
 }
