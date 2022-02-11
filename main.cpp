@@ -67,6 +67,9 @@ static struct argp argp = { options, parse_opt, args_doc, doc };
 
 int main(int argc, char **argv)
 {
+	// set locale to work with Glib::ustring
+	std::locale::global(std::locale(""));
+
 	struct arguments args;
 	args.silent = 0;
 	args.verbose = 0;
@@ -83,6 +86,7 @@ int main(int argc, char **argv)
 
 	try {
 		Tilemap map(args.args[0]);
+		std::cout << "map version: " << map.getMapVersion() << std::endl;
 	}
 	catch(const std::exception& e)
 	{

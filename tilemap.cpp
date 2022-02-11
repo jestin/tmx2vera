@@ -3,20 +3,6 @@
 #include<iostream>
 #include<stdlib.h>
 
-struct indent {
-	int depth_;
-	indent(int depth): depth_(depth) {};
-};
-
-std::ostream & operator<<(std::ostream & o, indent const & in)
-{
-	for(int i = 0; i != in.depth_; ++i)
-	{
-		o << "  ";
-	}
-	return o;
-}
-
 Tilemap::Tilemap(const char *filename)
 {
 	xmlpp::TextReader reader(filename);
@@ -33,29 +19,36 @@ Tilemap::~Tilemap()
 
 void Tilemap::processNode(xmlpp::TextReader&  reader)
 {
-	int depth = reader.get_depth();
-	std::cout << indent(depth) << "--- node ---" << std::endl;
-	std::cout << indent(depth) << "name: " << reader.get_name() << std::endl;
-	std::cout << indent(depth) << "depth: " << reader.get_depth() << std::endl;
-
-	if(reader.has_attributes())
+	switch(getElement(reader.get_name()))
 	{
-		std::cout << indent(depth) << "attributes: " << std::endl;
-		reader.move_to_first_attribute();
-		do
+		case TMX_ELEMENT::MAP:
+			processMapElement(reader);
+			break;
+		default:
+			break;
+	}
+}
+
+void Tilemap::processMapElement(xmlpp::TextReader&  reader)
+{
+	if(!reader.has_attributes())
+	{
+		throw new TilemapFileException();
+	}
+	
+	reader.move_to_first_attribute();
+	do{
+		switch(getMapAttribute(reader.get_name()))
 		{
-			std::cout << indent(depth) << "  " << reader.get_name() << ": " << reader.get_value() << std::endl;
-		} while(reader.move_to_next_attribute());
-		reader.move_to_element();
-	}
-	else
-	{
-		std::cout << indent(depth) << "no attributes" << std::endl;
-	}
+			case MAP_ATTRIBUTE::VERSION:
+				version = reader.get_value();
+			case MAP_ATTRIBUTE::TILED_VERSION:
+				tiledVersion = reader.get_value();
+			default:
+				break;
+		}
+	} while(reader.move_to_next_attribute());
 
-	if(reader.has_value())
-		std::cout << indent(depth) << "value: '" << reader.get_value() << "'" << std::endl;
-	else
-		std::cout << indent(depth) << "novalue" << std::endl;
-
+	// advance to the next element
+	reader.move_to_element();
 }
