@@ -91,9 +91,12 @@ int main(int argc, char **argv)
 		std::cout << "width: " << map.Width() << std::endl;
 		std::cout << "height: " << map.Height() << std::endl;
 
-		for(auto it = map.Layers().cbegin(); it != map.Layers().cend(); ++it)
+		for(auto it = map.Layers().begin(); it != map.Layers().end(); ++it)
 		{
-			std::cout << "Layer Width: " << it->Width() << std::endl;
+			std::cout << "Layer ID: " << (*it).Id() << std::endl;
+			std::cout << "Layer Name: " << (*it).Name() << std::endl;
+			std::cout << "Layer Width: " << (*it).Width() << std::endl;
+			std::cout << "Layer Height: " << (*it).Height() << std::endl;
 		}
 	}
 	catch(const std::exception& e)

@@ -13,21 +13,21 @@ class Layer
 		virtual ~Layer();
 
 		int Id() const { return id; }
-		void setId(uint32_t id) { this->id = id; }
+		void setId(int id) { this->id = id; }
 
 		std::string Name() const { return name; }
 		void setName(std::string name) { this->name = name; }
 
 		int Width() const { return width; }
-		void setWidth(uint32_t width) { this->width = width; }
+		void setWidth(int width) { this->width = width; }
 
 		int Height() const { return height; }
-		void setHeight(uint32_t height) { this->height = height; }
+		void setHeight(int height) { this->height = height; }
 
 	private:
-		uint32_t id;
+		int id;
 		std::string name;
 		int width;
 		int height;
-		// uint32_t data[];
+		// int data[];
 };

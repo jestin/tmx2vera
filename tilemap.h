@@ -17,26 +17,24 @@ class Tilemap
 		Tilemap(const char *filename);
 		virtual ~Tilemap();
 
-		Glib::ustring MapVersion() const { return version; }
-		Glib::ustring TiledVersion() const { return tiledVersion; }
-		uint32_t Width() const { return width; }
-		uint32_t Height() const { return height; }
-		std::vector<Layer> Layers() const { return layers; }
+		std::string MapVersion() const { return std::string(version); }
+		std::string TiledVersion() const { return std::string(tiledVersion); }
+		int Width() const { return width; }
+		int Height() const { return height; }
+		std::vector<Layer> const &Layers() const { return layers; }
 
 	private:
 		Glib::ustring version;
 		Glib::ustring tiledVersion;
-		uint32_t width;
-		uint32_t height;
-		uint32_t tileWidth;
-		uint32_t tileHeight;
+		int width;
+		int height;
+		int tileWidth;
+		int tileHeight;
 
-		void processMapElement(xmlpp::TextReader&  reader);
-		void processLayerElement(xmlpp::TextReader&  reader);
+		void readMap(xmlpp::TextReader& reader);
+		Layer readLayer(xmlpp::TextReader& reader);
 
 		std::vector<Layer> layers;
-
-		void processNode(xmlpp::TextReader&  reader);
 
 		// create lookup map functions
 #define GET_ELEMENT(funcName, enumType, mapName) \

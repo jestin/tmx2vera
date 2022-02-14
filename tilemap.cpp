@@ -6,46 +6,35 @@
 Tilemap::Tilemap(const char *filename)
 {
 	xmlpp::TextReader reader(filename);
-
-	while(reader.read())
-	{
-		processNode(reader);
-	}
+	
+	readMap(reader);
 }
 
 Tilemap::~Tilemap()
 {
 }
 
-void Tilemap::processNode(xmlpp::TextReader&  reader)
+void Tilemap::readMap(xmlpp::TextReader& reader)
 {
+	reader.read();
+
+	Glib::ustring name = reader.get_name();
+
+	// make sure that map is the first element
+	if(name != "map")
+	{
+		throw new TilemapFileException();
+	}
+	
 	xmlpp::TextReader::xmlNodeType nodeType = reader.get_node_type();
 
-	switch(nodeType)
+	// make sure it's a start element
+	if(nodeType != xmlpp::TextReader::xmlNodeType::Element)
 	{
-		case xmlpp::TextReader::xmlNodeType::Element:
-			switch(getElement(reader.get_name()))
-			{
-				case TMX_ELEMENT::MAP:
-					processMapElement(reader);
-					break;
-				case TMX_ELEMENT::LAYER:
-					processLayerElement(reader);
-					break;
-				default:
-					break;
-			}
-			break;
-		case xmlpp::TextReader::xmlNodeType::EndElement:
-			break;
-		default:
-			break;
+		throw new TilemapFileException();
 	}
 
-}
-
-void Tilemap::processMapElement(xmlpp::TextReader&  reader)
-{
+	// set the attribute values
 	if(!reader.has_attributes())
 	{
 		throw new TilemapFileException();
@@ -74,10 +63,39 @@ void Tilemap::processMapElement(xmlpp::TextReader&  reader)
 
 	// advance to the next element
 	reader.move_to_element();
+
+	// read child elements
+	while(reader.read())
+	{
+		name = reader.get_name();
+		nodeType = reader.get_node_type();
+
+		// check for map end
+		if(name == "map" && nodeType == xmlpp::TextReader::xmlNodeType::EndElement)
+			break;
+
+		switch(getElement(name))
+		{
+			case TMX_ELEMENT::LAYER:
+				layers.push_back(readLayer(reader));
+				break;
+			default:
+				break;
+		}
+	}
 }
 
-void Tilemap::processLayerElement(xmlpp::TextReader&  reader)
+Layer Tilemap::readLayer(xmlpp::TextReader& reader)
 {
+	Glib::ustring name = reader.get_name();
+	xmlpp::TextReader::xmlNodeType nodeType = reader.get_node_type();
+
+	// make sure it's a start element
+	if(nodeType != xmlpp::TextReader::xmlNodeType::Element)
+	{
+		throw new TilemapFileException();
+	}
+
 	if(!reader.has_attributes())
 	{
 		throw new TilemapFileException();
@@ -107,8 +125,20 @@ void Tilemap::processLayerElement(xmlpp::TextReader&  reader)
 		}
 	} while(reader.move_to_next_attribute());
 
-	layers.push_back(layer);
-
 	// advance to the next element
 	reader.move_to_element();
+	
+	// read child elements
+	while(reader.read())
+	{
+		name = reader.get_name();
+		nodeType = reader.get_node_type();
+
+		// check for map end
+		if(name == "layer" && nodeType == xmlpp::TextReader::xmlNodeType::EndElement)
+			break;
+	}
+
+
+	return layer;
 }
