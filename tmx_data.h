@@ -48,3 +48,14 @@ static std::map<Glib::ustring, LAYER_ATTRIBUTE> layerAttributeMap = {
 	{ "width", LAYER_ATTRIBUTE::LAYER_WIDTH },
 	{ "height", LAYER_ATTRIBUTE::LAYER_HEIGHT }
 };
+
+enum LAYER_DATA_ATTRIBUTE
+{
+	ENCODING = 1,
+	COMPRESSION
+};
+
+static std::map<Glib::ustring, LAYER_DATA_ATTRIBUTE> layerDataAttributeMap = {
+	{ "encoding", LAYER_DATA_ATTRIBUTE::ENCODING },
+	{ "compression", LAYER_DATA_ATTRIBUTE::COMPRESSION }
+};

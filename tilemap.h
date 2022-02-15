@@ -33,7 +33,7 @@ class Tilemap
 
 		void readMap(xmlpp::TextReader& reader);
 		Layer* readLayer(xmlpp::TextReader& reader);
-		int* readLayerData(xmlpp::TextReader& reader);
+		void readLayerData(xmlpp::TextReader& reader, Layer *layer);
 
 		std::vector<Layer*> layers;
 
@@ -50,6 +50,7 @@ class Tilemap
 		GET_ELEMENT(getElement, TMX_ELEMENT, elementMap)
 		GET_ELEMENT(getMapAttribute, MAP_ATTRIBUTE, mapAttributeMap)
 		GET_ELEMENT(getLayerAttribute, LAYER_ATTRIBUTE, layerAttributeMap)
+		GET_ELEMENT(getLayerDataAttribute, LAYER_DATA_ATTRIBUTE, layerDataAttributeMap)
 
 #undef GET_ELEMENT
 };

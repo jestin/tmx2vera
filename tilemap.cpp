@@ -148,6 +148,7 @@ Layer* Tilemap::readLayer(xmlpp::TextReader& reader)
 	switch(getElement(name))
 	{
 		case TMX_ELEMENT::DATA:
+			readLayerData(reader, layer);
 			break;
 		default:
 			break;
@@ -156,7 +157,58 @@ Layer* Tilemap::readLayer(xmlpp::TextReader& reader)
 	return layer;
 }
 
-int* Tilemap::readLayerData(xmlpp::TextReader& reader)
+void Tilemap::readLayerData(xmlpp::TextReader& reader, Layer *layer)
 {
-	return nullptr;
+	Glib::ustring name = reader.get_name();
+	xmlpp::TextReader::xmlNodeType nodeType = reader.get_node_type();
+	std::string encoding;
+	std::string compression;
+
+	if(name != "data")
+	{
+		throw new TilemapFileException();
+	}
+
+	// make sure it's a start element
+	if(nodeType != xmlpp::TextReader::xmlNodeType::Element)
+	{
+		throw new TilemapFileException();
+	}
+
+	if(!reader.has_attributes())
+	{
+		throw new TilemapFileException();
+	}
+
+	reader.move_to_first_attribute();
+	do{
+		switch(getLayerDataAttribute(reader.get_name()))
+		{
+			case LAYER_DATA_ATTRIBUTE::ENCODING:
+				 encoding = reader.get_value();
+				break;
+			case LAYER_DATA_ATTRIBUTE::COMPRESSION:
+				 compression = reader.get_value();
+				break;
+			default:
+				break;
+		}
+	} while(reader.move_to_next_attribute());
+
+	if(encoding == "csv")
+	{
+		// TODO: set layer->Data() to CSV values
+	}
+	else if (encoding == "base64" && compression == "gzip")
+	{
+		// TODO: set layer->Data() to gzipped BASE64 values
+	}
+	else if (encoding == "base64" && compression == "zlib")
+	{
+		// TODO: set layer->Data() to zlib compressed BASE64 values
+	}
+	else if (encoding == "base64")
+	{
+		// TODO: set layer->Data() to uncompressed BASE64 values
+	}
 }
