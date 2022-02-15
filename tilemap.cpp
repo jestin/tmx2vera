@@ -12,6 +12,10 @@ Tilemap::Tilemap(const char *filename)
 
 Tilemap::~Tilemap()
 {
+	for(auto it = layers.begin(); it != layers.end(); ++it)
+	{
+		delete (*it);
+	}
 }
 
 void Tilemap::readMap(xmlpp::TextReader& reader)
@@ -85,10 +89,12 @@ void Tilemap::readMap(xmlpp::TextReader& reader)
 	}
 }
 
-Layer Tilemap::readLayer(xmlpp::TextReader& reader)
+Layer* Tilemap::readLayer(xmlpp::TextReader& reader)
 {
 	Glib::ustring name = reader.get_name();
 	xmlpp::TextReader::xmlNodeType nodeType = reader.get_node_type();
+	int id, width, height;
+	std::string layerName;
 
 	// make sure it's a start element
 	if(nodeType != xmlpp::TextReader::xmlNodeType::Element)
@@ -101,33 +107,33 @@ Layer Tilemap::readLayer(xmlpp::TextReader& reader)
 		throw new TilemapFileException();
 	}
 
-	// create the layer
-	Layer layer;
-
 	reader.move_to_first_attribute();
 	do{
 		switch(getLayerAttribute(reader.get_name()))
 		{
 			case LAYER_ATTRIBUTE::LAYER_ID:
-				layer.setId(atoi(reader.get_value().c_str()));
+				id = atoi(reader.get_value().c_str());
 				break;
 			case LAYER_ATTRIBUTE::LAYER_NAME:
-				layer.setName(reader.get_value());
+				layerName = reader.get_value();
 				break;
 			case LAYER_ATTRIBUTE::LAYER_WIDTH:
-				layer.setWidth(atoi(reader.get_value().c_str()));
+				width = atoi(reader.get_value().c_str());
 				break;
 			case LAYER_ATTRIBUTE::LAYER_HEIGHT:
-				layer.setHeight(atoi(reader.get_value().c_str()));
+				height = atoi(reader.get_value().c_str());
 				break;
 			default:
 				break;
 		}
 	} while(reader.move_to_next_attribute());
 
+	// create the layer
+	Layer* layer = new Layer(id, layerName, width, height);
+
 	// advance to the next element
 	reader.move_to_element();
-	
+
 	// read child elements
 	while(reader.read())
 	{
@@ -139,6 +145,18 @@ Layer Tilemap::readLayer(xmlpp::TextReader& reader)
 			break;
 	}
 
+	switch(getElement(name))
+	{
+		case TMX_ELEMENT::DATA:
+			break;
+		default:
+			break;
+	}
 
 	return layer;
+}
+
+int* Tilemap::readLayerData(xmlpp::TextReader& reader)
+{
+	return nullptr;
 }

@@ -21,7 +21,7 @@ class Tilemap
 		std::string TiledVersion() const { return std::string(tiledVersion); }
 		int Width() const { return width; }
 		int Height() const { return height; }
-		std::vector<Layer> const &Layers() const { return layers; }
+		std::vector<Layer*> const &Layers() const { return layers; }
 
 	private:
 		Glib::ustring version;
@@ -32,9 +32,10 @@ class Tilemap
 		int tileHeight;
 
 		void readMap(xmlpp::TextReader& reader);
-		Layer readLayer(xmlpp::TextReader& reader);
+		Layer* readLayer(xmlpp::TextReader& reader);
+		int* readLayerData(xmlpp::TextReader& reader);
 
-		std::vector<Layer> layers;
+		std::vector<Layer*> layers;
 
 		// create lookup map functions
 #define GET_ELEMENT(funcName, enumType, mapName) \

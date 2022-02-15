@@ -9,7 +9,7 @@
 class Layer
 {
 	public:
-		Layer();
+		Layer(int id, std::string name, int width, int height);
 		virtual ~Layer();
 
 		int Id() const { return id; }
@@ -24,10 +24,12 @@ class Layer
 		int Height() const { return height; }
 		void setHeight(int height) { this->height = height; }
 
+		const uint32_t* Data() const { return data; }
+
 	private:
 		int id;
 		std::string name;
 		int width;
 		int height;
-		// int data[];
+		uint32_t* data;
 };
