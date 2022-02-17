@@ -97,6 +97,15 @@ int main(int argc, char **argv)
 			std::cout << "Layer Name: " << (*it)->Name() << std::endl;
 			std::cout << "Layer Width: " << (*it)->Width() << std::endl;
 			std::cout << "Layer Height: " << (*it)->Height() << std::endl;
+
+			for(int y = 0; y < (*it)->Height(); y++)
+			{
+				for(int x = 0; x < (*it)->Width(); x++)
+				{
+					std::cout << (*it)->Data()[(y * (*it)->Width()) + x] << ",";
+				}
+				std::cout << std::endl;
+			}
 		}
 	}
 	catch(const TilemapFileException& e)

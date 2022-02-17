@@ -195,24 +195,7 @@ void Tilemap::readLayerData(xmlpp::TextReader& reader, Layer *layer)
 		}
 	} while(reader.move_to_next_attribute());
 
-	if(encoding == "csv")
-	{
-		// TODO: set layer->Data() to CSV values
-	}
-	else if (encoding == "base64" && compression == "gzip")
-	{
-		// TODO: set layer->Data() to gzipped BASE64 values
-	}
-	else if (encoding == "base64" && compression == "zlib")
-	{
-		// TODO: set layer->Data() to zlib compressed BASE64 values
-	}
-	else if (encoding == "base64")
-	{
-		// TODO: set layer->Data() to uncompressed BASE64 values
-	}
-
-	// read child elements
+	// read to end of layer data element
 	while(reader.read())
 	{
 		name = reader.get_name();
@@ -221,5 +204,23 @@ void Tilemap::readLayerData(xmlpp::TextReader& reader, Layer *layer)
 		// check for map end
 		if(name == "data" && nodeType == xmlpp::TextReader::xmlNodeType::EndElement)
 			break;
+
+		if(encoding == "csv")
+		{
+			// TODO: set layer->Data() to CSV values
+			layer->setData(reader.get_value());
+		}
+		else if (encoding == "base64" && compression == "gzip")
+		{
+			// TODO: set layer->Data() to gzipped BASE64 values
+		}
+		else if (encoding == "base64" && compression == "zlib")
+		{
+			// TODO: set layer->Data() to zlib compressed BASE64 values
+		}
+		else if (encoding == "base64")
+		{
+			// TODO: set layer->Data() to uncompressed BASE64 values
+		}
 	}
 }
