@@ -58,13 +58,15 @@ class Tilemap
 class TilemapException
 {
 	public:
-		TilemapException() { }
+		TilemapException(const std::string &message): message(message) { }
+		std::string message;
+
 };
 
 class TilemapFileException : public TilemapException
 {
 	public:
-		TilemapFileException()
-			: TilemapException() { }
+		TilemapFileException(const std::string &message)
+			: TilemapException(message) { }
 };
 

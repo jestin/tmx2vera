@@ -27,7 +27,7 @@ void Tilemap::readMap(xmlpp::TextReader& reader)
 	// make sure that map is the first element
 	if(name != "map")
 	{
-		throw new TilemapFileException();
+		throw TilemapFileException("First element not 'map'");
 	}
 	
 	xmlpp::TextReader::xmlNodeType nodeType = reader.get_node_type();
@@ -35,13 +35,13 @@ void Tilemap::readMap(xmlpp::TextReader& reader)
 	// make sure it's a start element
 	if(nodeType != xmlpp::TextReader::xmlNodeType::Element)
 	{
-		throw new TilemapFileException();
+		throw TilemapFileException("End 'map' element without start");
 	}
 
 	// set the attribute values
 	if(!reader.has_attributes())
 	{
-		throw new TilemapFileException();
+		throw TilemapFileException("'map' element has no attributes");
 	}
 	
 	reader.move_to_first_attribute();
@@ -99,12 +99,12 @@ Layer* Tilemap::readLayer(xmlpp::TextReader& reader)
 	// make sure it's a start element
 	if(nodeType != xmlpp::TextReader::xmlNodeType::Element)
 	{
-		throw new TilemapFileException();
+		throw TilemapFileException("End 'layer' element without start");
 	}
 
 	if(!reader.has_attributes())
 	{
-		throw new TilemapFileException();
+		throw TilemapFileException("'layer' element has no attributes");
 	}
 
 	reader.move_to_first_attribute();
@@ -143,15 +143,15 @@ Layer* Tilemap::readLayer(xmlpp::TextReader& reader)
 		// check for map end
 		if(name == "layer" && nodeType == xmlpp::TextReader::xmlNodeType::EndElement)
 			break;
-	}
 
-	switch(getElement(name))
-	{
-		case TMX_ELEMENT::DATA:
-			readLayerData(reader, layer);
-			break;
-		default:
-			break;
+		switch(getElement(name))
+		{
+			case TMX_ELEMENT::DATA:
+				readLayerData(reader, layer);
+				break;
+			default:
+				break;
+		}
 	}
 
 	return layer;
@@ -166,18 +166,18 @@ void Tilemap::readLayerData(xmlpp::TextReader& reader, Layer *layer)
 
 	if(name != "data")
 	{
-		throw new TilemapFileException();
+		throw TilemapFileException("Expected 'data' element");
 	}
 
 	// make sure it's a start element
 	if(nodeType != xmlpp::TextReader::xmlNodeType::Element)
 	{
-		throw new TilemapFileException();
+		throw TilemapFileException("End 'data' element without start");
 	}
 
 	if(!reader.has_attributes())
 	{
-		throw new TilemapFileException();
+		throw TilemapFileException("'data' element has no attributes");
 	}
 
 	reader.move_to_first_attribute();
@@ -210,5 +210,16 @@ void Tilemap::readLayerData(xmlpp::TextReader& reader, Layer *layer)
 	else if (encoding == "base64")
 	{
 		// TODO: set layer->Data() to uncompressed BASE64 values
+	}
+
+	// read child elements
+	while(reader.read())
+	{
+		name = reader.get_name();
+		nodeType = reader.get_node_type();
+
+		// check for map end
+		if(name == "data" && nodeType == xmlpp::TextReader::xmlNodeType::EndElement)
+			break;
 	}
 }

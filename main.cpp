@@ -99,9 +99,9 @@ int main(int argc, char **argv)
 			std::cout << "Layer Height: " << (*it)->Height() << std::endl;
 		}
 	}
-	catch(const std::exception& e)
+	catch(const TilemapFileException& e)
 	{
-		std::cerr << "Exception caught: " << e.what() << std::endl;
+		std::cerr << "Exception caught: " << e.message << std::endl;
 	}
 
 	return 0;
