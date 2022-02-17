@@ -207,20 +207,22 @@ void Tilemap::readLayerData(xmlpp::TextReader& reader, Layer *layer)
 
 		if(encoding == "csv")
 		{
-			// TODO: set layer->Data() to CSV values
-			layer->setData(reader.get_value());
+			layer->setDataFromCsv(reader.get_value());
 		}
 		else if (encoding == "base64" && compression == "gzip")
 		{
 			// TODO: set layer->Data() to gzipped BASE64 values
+			throw TilemapFileException("base64 gzip layer encoding not supported");
 		}
 		else if (encoding == "base64" && compression == "zlib")
 		{
 			// TODO: set layer->Data() to zlib compressed BASE64 values
+			throw TilemapFileException("base64 zlib layer encoding not supported");
 		}
 		else if (encoding == "base64")
 		{
 			// TODO: set layer->Data() to uncompressed BASE64 values
+			throw TilemapFileException("base64 layer encoding not supported");
 		}
 	}
 }

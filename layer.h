@@ -25,7 +25,7 @@ class Layer
 		void setHeight(int height) { this->height = height; }
 
 		const uint32_t* Data() const { return data; }
-		void setData(const std::string &csvData);
+		void setDataFromCsv(const std::string &csvData);
 
 	private:
 		int id;

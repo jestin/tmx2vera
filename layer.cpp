@@ -14,7 +14,7 @@ Layer::~Layer()
 	free(data);
 }
 
-void Layer::setData(const std::string &csvData)
+void Layer::setDataFromCsv(const std::string &csvData)
 {
 	// stream the string
 	std::stringstream csvStream(csvData);
