@@ -4,6 +4,7 @@
 #include<argp.h>
 
 #include"tilemap.h"
+#include"vera_tilemap.h"
 
 const char *argp_program_version = "tmx2vera 0.1";
 const char *argp_program_bug_address = "<jestin.stoffel@gmail.com>";
@@ -84,6 +85,11 @@ int main(int argc, char **argv)
 				std::cout << std::endl;
 			}
 		}
+
+		VeraTilemap veraMap(map, args.layer_name);
+
+		veraMap.writeFile(args.args[1]);
+		
 	}
 	catch(const TilemapFileException& e)
 	{
