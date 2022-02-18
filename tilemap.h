@@ -1,6 +1,6 @@
 #pragma once
 
-#include<vector>
+#include<map>
 #include<string>
 #include<cstdint>
 
@@ -21,7 +21,7 @@ class Tilemap
 		std::string TiledVersion() const { return std::string(tiledVersion); }
 		int Width() const { return width; }
 		int Height() const { return height; }
-		std::vector<Layer*> const &Layers() const { return layers; }
+		std::map<std::string, Layer*> Layers() { return layers; }
 
 	private:
 		Glib::ustring version;
@@ -35,7 +35,7 @@ class Tilemap
 		Layer* readLayer(xmlpp::TextReader& reader);
 		void readLayerData(xmlpp::TextReader& reader, Layer *layer);
 
-		std::vector<Layer*> layers;
+		std::map<std::string, Layer*> layers;
 
 		// create lookup map functions
 #define GET_ELEMENT(funcName, enumType, mapName) \

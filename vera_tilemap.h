@@ -1,15 +1,16 @@
 #pragma once
 
-#include "tilemap.h"
+#include "layer.h"
 
 class VeraTilemap
 {
 	public:
-		VeraTilemap(const Tilemap &tilemap, const std::string &layerName);
+		VeraTilemap(Layer *layer);
 		virtual ~VeraTilemap();
 
 		void writeFile(const std::string &filename) const;
 
 	private:
+		Layer *layer;
 };
 

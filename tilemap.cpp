@@ -14,7 +14,7 @@ Tilemap::~Tilemap()
 {
 	for(auto it = layers.begin(); it != layers.end(); ++it)
 	{
-		delete (*it);
+		delete (*it).second;
 	}
 }
 
@@ -68,6 +68,8 @@ void Tilemap::readMap(xmlpp::TextReader& reader)
 	// advance to the next element
 	reader.move_to_element();
 
+	Layer* curLayer;
+
 	// read child elements
 	while(reader.read())
 	{
@@ -81,7 +83,8 @@ void Tilemap::readMap(xmlpp::TextReader& reader)
 		switch(getElement(name))
 		{
 			case TMX_ELEMENT::LAYER:
-				layers.push_back(readLayer(reader));
+				curLayer = readLayer(reader);
+				layers[curLayer->Name()] = curLayer;
 				break;
 			default:
 				break;

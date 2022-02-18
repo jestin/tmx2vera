@@ -69,27 +69,27 @@ int main(int argc, char **argv)
 		std::cout << "width: " << map.Width() << std::endl;
 		std::cout << "height: " << map.Height() << std::endl;
 
-		for(auto it = map.Layers().begin(); it != map.Layers().end(); ++it)
+		int index = 0;
+		for(const auto &item : map.Layers())
 		{
-			std::cout << "Layer ID: " << (*it)->Id() << std::endl;
-			std::cout << "Layer Name: " << (*it)->Name() << std::endl;
-			std::cout << "Layer Width: " << (*it)->Width() << std::endl;
-			std::cout << "Layer Height: " << (*it)->Height() << std::endl;
-
-			for(int y = 0; y < (*it)->Height(); y++)
-			{
-				for(int x = 0; x < (*it)->Width(); x++)
-				{
-					std::cout << (*it)->Data()[(y * (*it)->Width()) + x] << ",";
-				}
-				std::cout << std::endl;
-			}
+			std::cout << index++ << ":  " << item.first << std::endl;
+			Layer *layer = item.second;
+			std::cout << "Layer ID: " << layer->Id() << std::endl;
+			std::cout << "Layer Name: " << layer->Name() << std::endl;
+			std::cout << "Layer Width: " << layer->Width() << std::endl;
+			std::cout << "Layer Height: " << layer->Height() << std::endl;
 		}
 
-		VeraTilemap veraMap(map, args.layer_name);
+		std::map<std::string, Layer*> layers = map.Layers();
 
-		veraMap.writeFile(args.args[1]);
-		
+		Layer *namedLayer = map.Layers()[std::string(args.layer_name)];
+
+		if(namedLayer)
+		{
+			VeraTilemap veraMap(namedLayer);
+			veraMap.writeFile(args.args[1]);
+		}
+
 	}
 	catch(const TilemapFileException& e)
 	{
