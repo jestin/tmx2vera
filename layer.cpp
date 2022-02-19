@@ -1,7 +1,6 @@
 #include "layer.h"
 
 #include<sstream>
-#include<iostream>
 
 Layer::Layer(int id, std::string name, int width, int height)
 	:id(id), name(name), width(width), height(height)
@@ -27,6 +26,4 @@ void Layer::setDataFromCsv(const std::string &csvData)
 		data[index] = (uint32_t) atoi(cell.c_str());
 		index++;
 	}
-
-	std::cout << "index: " << index << std::endl;
 }
