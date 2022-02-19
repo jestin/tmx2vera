@@ -3,9 +3,6 @@
 #include<string>
 #include<cstdint>
 
-#define HFLIP_FLAG 0x80000000
-#define VFLIP_FLAG 0x40000000
-
 class Layer
 {
 	public:
