@@ -16,6 +16,11 @@ Tilemap::~Tilemap()
 	{
 		delete (*it).second;
 	}
+
+	for(auto it = tilesets.begin(); it != tilesets.end(); ++it)
+	{
+		delete *it;
+	}
 }
 
 void Tilemap::readMap(xmlpp::TextReader& reader)
@@ -69,6 +74,7 @@ void Tilemap::readMap(xmlpp::TextReader& reader)
 	reader.move_to_element();
 
 	Layer* curLayer;
+	Tileset* curTileset;
 
 	// read child elements
 	while(reader.read())
@@ -86,6 +92,9 @@ void Tilemap::readMap(xmlpp::TextReader& reader)
 				curLayer = readLayer(reader);
 				layers[curLayer->Name()] = curLayer;
 				break;
+			case TMX_ELEMENT::TILESET:
+				curTileset = readTileset(reader);
+				tilesets.push_back(curTileset);
 			default:
 				break;
 		}
@@ -228,4 +237,46 @@ void Tilemap::readLayerData(xmlpp::TextReader& reader, Layer *layer)
 			throw TilemapFileException("base64 layer encoding not supported");
 		}
 	}
+}
+
+Tileset* Tilemap::readTileset(xmlpp::TextReader& reader)
+{
+	Glib::ustring name = reader.get_name();
+	xmlpp::TextReader::xmlNodeType nodeType = reader.get_node_type();
+	int firstGid;
+	std::string source;
+
+	// make sure it's a start element
+	if(nodeType != xmlpp::TextReader::xmlNodeType::Element)
+	{
+		throw TilemapFileException("End 'tileset' element without start");
+	}
+
+	if(!reader.has_attributes())
+	{
+		throw TilemapFileException("'tileset' element has no attributes");
+	}
+
+	reader.move_to_first_attribute();
+	do{
+		switch(getTilesetAttribute(reader.get_name()))
+		{
+			case TILESET_ATTRIBUTE::FIRSTGID:
+				firstGid = atoi(reader.get_value().c_str());
+				break;
+			case TILESET_ATTRIBUTE::SOURCE:
+				source = reader.get_value();
+				break;
+			default:
+				break;
+		}
+	} while(reader.move_to_next_attribute());
+
+	// create the tileset
+	Tileset* tileset = new Tileset(firstGid, source);
+
+	// advance to the next element
+	reader.move_to_element();
+
+	return tileset;
 }

@@ -10,6 +10,7 @@
 #include"tmx_data.h"
 
 #include"layer.h"
+#include"tileset.h"
 
 class Tilemap
 {
@@ -22,6 +23,7 @@ class Tilemap
 		int Width() const { return width; }
 		int Height() const { return height; }
 		std::map<std::string, Layer*> Layers() { return layers; }
+		std::vector<Tileset*> Tilesets() { return tilesets; }
 
 	private:
 		Glib::ustring version;
@@ -34,8 +36,10 @@ class Tilemap
 		void readMap(xmlpp::TextReader& reader);
 		Layer* readLayer(xmlpp::TextReader& reader);
 		void readLayerData(xmlpp::TextReader& reader, Layer *layer);
+		Tileset* readTileset(xmlpp::TextReader& reader);
 
 		std::map<std::string, Layer*> layers;
+		std::vector<Tileset*> tilesets;
 
 		// create lookup map functions
 #define GET_ELEMENT(funcName, enumType, mapName) \
@@ -51,6 +55,7 @@ class Tilemap
 		GET_ELEMENT(getMapAttribute, MAP_ATTRIBUTE, mapAttributeMap)
 		GET_ELEMENT(getLayerAttribute, LAYER_ATTRIBUTE, layerAttributeMap)
 		GET_ELEMENT(getLayerDataAttribute, LAYER_DATA_ATTRIBUTE, layerDataAttributeMap)
+		GET_ELEMENT(getTilesetAttribute, TILESET_ATTRIBUTE, tilesetAttributeMap)
 
 #undef GET_ELEMENT
 };

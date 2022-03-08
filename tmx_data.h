@@ -59,3 +59,14 @@ static std::map<Glib::ustring, LAYER_DATA_ATTRIBUTE> layerDataAttributeMap = {
 	{ "encoding", LAYER_DATA_ATTRIBUTE::ENCODING },
 	{ "compression", LAYER_DATA_ATTRIBUTE::COMPRESSION }
 };
+
+enum TILESET_ATTRIBUTE
+{
+	SOURCE = 1,
+	FIRSTGID
+};
+
+static std::map<Glib::ustring, TILESET_ATTRIBUTE> tilesetAttributeMap = {
+	{ "source", TILESET_ATTRIBUTE::SOURCE },
+	{ "firstgid", TILESET_ATTRIBUTE::FIRSTGID }
+};
