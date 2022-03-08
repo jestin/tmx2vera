@@ -1,6 +1,7 @@
 #pragma once
 
 #include<map>
+#include<set>
 #include<string>
 #include<cstdint>
 
@@ -23,7 +24,7 @@ class Tilemap
 		int Width() const { return width; }
 		int Height() const { return height; }
 		std::map<std::string, Layer*> Layers() { return layers; }
-		std::vector<Tileset*> Tilesets() { return tilesets; }
+		std::set<Tileset*> Tilesets() { return tilesets; }
 
 	private:
 		Glib::ustring version;
@@ -39,7 +40,9 @@ class Tilemap
 		Tileset* readTileset(xmlpp::TextReader& reader);
 
 		std::map<std::string, Layer*> layers;
-		std::vector<Tileset*> tilesets;
+
+		// a set is used so that these are sorted
+		std::set<Tileset*> tilesets;
 
 		// create lookup map functions
 #define GET_ELEMENT(funcName, enumType, mapName) \

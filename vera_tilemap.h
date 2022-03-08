@@ -1,6 +1,6 @@
 #pragma once
 
-#include "layer.h"
+#include "tilemap.h"
 
 #define HFLIP_FLAG 0x80000000
 #define VFLIP_FLAG 0x40000000
@@ -8,13 +8,13 @@
 class VeraTilemap
 {
 	public:
-		VeraTilemap(Layer *layer);
+		VeraTilemap(Tilemap *tilemap);
 		virtual ~VeraTilemap();
 
-		void writeFile(const std::string &filename) const;
+		void writeFile(const std::string &filename, const std::string &layername) const;
 
 	private:
-		Layer *layer;
+		Tilemap *tilemap;
 };
 
 class VeraTilemapException

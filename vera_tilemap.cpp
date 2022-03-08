@@ -6,8 +6,8 @@
 
 using namespace std;
 
-VeraTilemap::VeraTilemap(Layer *layer)
-	:layer(layer)
+VeraTilemap::VeraTilemap(Tilemap *tilemap)
+	:tilemap(tilemap)
 {
 }
 
@@ -15,8 +15,15 @@ VeraTilemap::~VeraTilemap()
 {
 }
 
-void VeraTilemap::writeFile(const std::string &filename) const
+void VeraTilemap::writeFile(const std::string &filename, const std::string &layername) const
 {
+	Layer *layer = tilemap->Layers()[std::string(layername)];
+
+	if(!layer)
+	{
+		throw VeraTilemapFileException("Could not find layer");
+	}
+
 	ofstream file;
 	file.open(filename, ios::out | ios::binary);
 
@@ -39,9 +46,21 @@ void VeraTilemap::writeFile(const std::string &filename) const
 		for (uint32_t x = 0; x < width; ++x) {
 			const int index = (y * width) + x;
 			const uint32_t rawTile = layer->Data()[index];
+			int firstgid = 1;
 
 			// capture just the lower 10 bits
 			uint16_t tileId = rawTile & 0x03FF;
+
+			// determine firstgid
+			for(auto tileset : tilemap->Tilesets())
+			{
+				// the set of tilesets are sorted, so we only have to check if
+				// it's greater than
+				if(tileId >= tileset->FirstGid())
+				{
+					firstgid = tileset->FirstGid();
+				}
+			}
 
 			// no tile
 			if(tileId == 0)
@@ -52,7 +71,7 @@ void VeraTilemap::writeFile(const std::string &filename) const
 			}
 
 			// make 0 based
-			tileId -= 1;
+			tileId -= firstgid;
 
 			// first byte: tile index (0:7)
 			file << (uint8_t) tileId;

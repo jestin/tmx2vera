@@ -64,15 +64,8 @@ int main(int argc, char **argv)
 
 	try {
 		Tilemap map(args.args[0]);
-
-		Layer *namedLayer = map.Layers()[std::string(args.layer_name)];
-
-		if(namedLayer)
-		{
-			VeraTilemap veraMap(namedLayer);
-			veraMap.writeFile(args.args[1]);
-		}
-
+		VeraTilemap veraMap(&map);
+		veraMap.writeFile(args.args[1], std::string(args.layer_name));
 	}
 	catch(const TilemapFileException& e)
 	{
