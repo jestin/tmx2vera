@@ -4,7 +4,9 @@
 #include<argp.h>
 
 #include"tilemap.h"
+#include"output_tilemap.h"
 #include"vera_tilemap.h"
+#include"collision_tilemap.h"
 
 const char *argp_program_version = "tmx2vera 0.1";
 const char *argp_program_bug_address = "https://github.com/jestin/tmx2vera/issues";
@@ -13,6 +15,7 @@ static char args_doc[] = "TMX_FILE OUTPUT_FILE";
 
 static struct argp_option options[] = {
 	{"layer", 'l', "LAYER_NAME", 0, "The name of the layer to convert"},
+	{"collision", 'c', 0, 0, "Output a 1 byte per tile collision map instead of 2 byte per tile VERA tile map"},
 	{ 0 }
 };
 
@@ -20,6 +23,7 @@ struct arguments
 {
 	char *args[2];
 	char *layer_name;
+	int collision = 0;
 };
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state)
@@ -30,6 +34,9 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
 	{
 		case 'l':
 			args->layer_name = arg;
+			break;
+		case 'c':
+			args->collision = 1;
 			break;
 		case ARGP_KEY_ARG:
 			if(state->arg_num >= 2)
@@ -64,8 +71,20 @@ int main(int argc, char **argv)
 
 	try {
 		Tilemap map(args.args[0]);
-		VeraTilemap veraMap(&map);
-		veraMap.writeFile(args.args[1], std::string(args.layer_name));
+		OutputTilemap *outputMap;
+
+		if(args.collision)
+		{
+			outputMap = new CollisionTilemap(&map);
+		}
+		else
+		{
+			outputMap = new VeraTilemap(&map);
+		}
+
+		outputMap->writeFile(args.args[1], std::string(args.layer_name));
+
+		delete outputMap;
 	}
 	catch(const TilemapFileException& e)
 	{
