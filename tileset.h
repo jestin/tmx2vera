@@ -9,7 +9,7 @@ class Tileset
 		Tileset(int id, std::string name);
 		virtual ~Tileset();
 
-		int FirstGid() const { return firstGid; }
+		uint32_t FirstGid() const { return firstGid; }
 		void setFirstGid(int firstGid) { this->firstGid = firstGid; }
 
 		std::string Source() const { return source; }
@@ -19,6 +19,6 @@ class Tileset
 		bool operator<(const Tileset &a) const { return firstGid < a.FirstGid(); }
 
 	private:
-		int firstGid;
+		uint32_t firstGid;
 		std::string source;
 };

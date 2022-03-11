@@ -43,19 +43,19 @@ void CollisionTilemap::writeFile(const std::string &filename, const std::string 
 			const uint32_t rawTile = layer->Data()[index];
 			int firstgid = 1;
 
-			// only 8 bit tile IDs are allowed for collision maps
-			uint16_t tileId = (uint8_t) (rawTile & 0x00FF);
-
 			// determine firstgid
 			for(auto tileset : tilemap->Tilesets())
 			{
 				// the set of tilesets are sorted, so we only have to check if
 				// it's greater than
-				if(tileId >= tileset->FirstGid())
+				if(rawTile >= tileset->FirstGid())
 				{
 					firstgid = tileset->FirstGid();
 				}
 			}
+
+			// make 0 based
+			uint8_t tileId = rawTile - firstgid;
 
 			// no tile
 			if(tileId == 0)
@@ -63,9 +63,6 @@ void CollisionTilemap::writeFile(const std::string &filename, const std::string 
 				file << (uint8_t)0;
 				continue;
 			}
-
-			// make 0 based
-			tileId -= firstgid;
 
 			// write the byte out
 			file << (uint8_t) tileId;

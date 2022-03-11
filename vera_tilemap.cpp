@@ -41,19 +41,20 @@ void VeraTilemap::writeFile(const std::string &filename, const std::string &laye
 			const uint32_t rawTile = layer->Data()[index];
 			int firstgid = 1;
 
-			// capture just the lower 10 bits
-			uint16_t tileId = rawTile & 0x03FF;
-
 			// determine firstgid
 			for(auto tileset : tilemap->Tilesets())
 			{
 				// the set of tilesets are sorted, so we only have to check if
 				// it's greater than
-				if(tileId >= tileset->FirstGid())
+				if(rawTile >= tileset->FirstGid())
 				{
-					firstgid = tileset->FirstGid();
+					firstgid = (tileset->FirstGid()) & 0x03FF;
 				}
 			}
+
+			// make 0 based
+			// capture just the lower 10 bits
+			uint16_t tileId = rawTile - firstgid;
 
 			// no tile
 			if(tileId == 0)
@@ -62,9 +63,6 @@ void VeraTilemap::writeFile(const std::string &filename, const std::string &laye
 				file << (uint8_t)0;
 				continue;
 			}
-
-			// make 0 based
-			tileId -= firstgid;
 
 			// first byte: tile index (0:7)
 			file << (uint8_t) tileId;
