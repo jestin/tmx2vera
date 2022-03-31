@@ -54,6 +54,13 @@ void CollisionTilemap::writeFile(const std::string &filename, const std::string 
 				}
 			}
 
+			// if the raw tile is 0, write 0
+			if(rawTile == 0)
+			{
+				file << (uint8_t)0;
+				continue;
+			}
+
 			// make 0 based
 			uint8_t tileId = rawTile - firstgid;
 
