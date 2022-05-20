@@ -94,7 +94,7 @@ void Tilemap::readMap(xmlpp::TextReader& reader)
 				break;
 			case TMX_ELEMENT::TILESET:
 				curTileset = readTileset(reader);
-				tilesets.insert(curTileset);
+				tilesets.push_back(curTileset);
 			default:
 				break;
 		}
