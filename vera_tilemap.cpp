@@ -46,14 +46,14 @@ void VeraTilemap::writeFile(const std::string &filename, const std::string &laye
 			{
 				// the set of tilesets are sorted, so we only have to check if
 				// it's greater than
-				if(rawTile >= tileset->FirstGid())
+				if((rawTile & !(HFLIP_FLAG | VFLIP_FLAG)) >= tileset->FirstGid())
 				{
+					// capture just the lower 10 bits
 					firstgid = (tileset->FirstGid()) & 0x03FF;
 				}
 			}
 
 			// make 0 based
-			// capture just the lower 10 bits
 			uint16_t tileId = rawTile - firstgid;
 
 			// no tile
