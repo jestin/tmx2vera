@@ -43,6 +43,7 @@ Commander X16 computer
 
   -c, --collision            Output a 1 byte per tile collision map instead of
                              2 byte per tile VERA tile map
+  -d, --disable-paloffset    Do not write a palette offset to the tile data
   -l, --layer=LAYER_NAME     The name of the layer to convert
   -?, --help                 Give this help list
       --usage                Give a short usage message

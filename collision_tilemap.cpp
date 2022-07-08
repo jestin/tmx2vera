@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void CollisionTilemap::writeFile(const std::string &filename, const std::string &layername) const
+void CollisionTilemap::writeFile(const std::string &filename, const std::string &layername, const int &disable_paloffset) const
 {
 	Layer *layer = tilemap->Layers()[std::string(layername)];
 

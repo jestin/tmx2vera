@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void VeraTilemap::writeFile(const std::string &filename, const std::string &layername) const
+void VeraTilemap::writeFile(const std::string &filename, const std::string &layername, const int &disable_paloffset) const
 {
 	Layer *layer = tilemap->Layers()[std::string(layername)];
 
@@ -55,7 +55,7 @@ void VeraTilemap::writeFile(const std::string &filename, const std::string &laye
 				}
 			}
 
-			if(firstgid - prev_firstgid > 0)
+			if(!disable_paloffset && firstgid - prev_firstgid > 0)
 			{
 				paloffset = rawTile / (firstgid - prev_firstgid);
 			}

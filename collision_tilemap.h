@@ -8,7 +8,7 @@ class CollisionTilemap : public OutputTilemap
 		CollisionTilemap(Tilemap *tilemap): OutputTilemap(tilemap) {}
 		virtual ~CollisionTilemap() {}
 
-		void writeFile(const std::string &filename, const std::string &layername) const override;
+		void writeFile(const std::string &filename, const std::string &layername, const int &disable_paloffset = 0) const override;
 };
 
 class CollisionTilemapFileException : public OutputTilemapException
