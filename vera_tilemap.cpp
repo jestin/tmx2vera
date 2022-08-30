@@ -46,12 +46,13 @@ void VeraTilemap::writeFile(const std::string &filename, const std::string &laye
 			// determine firstgid
 			for(auto tileset : tilemap->Tilesets())
 			{
-				if((rawTile & 0x03FF) >= tileset->FirstGid() &&
+				// mask off the upper byte which contains flags like hflip and vflip
+				if((rawTile & 0x00FFFFFF) >= tileset->FirstGid() &&
 						tileset->FirstGid() > firstgid)
 				{
-					// capture just the lower 10 bits
+					// capture just the lower 24 bits to exclude flags
 					prev_firstgid = firstgid;
-					firstgid = (tileset->FirstGid()) & 0x03FF;
+					firstgid = (tileset->FirstGid()) & 0x00FFFFFF;
 				}
 			}
 
