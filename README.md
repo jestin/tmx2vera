@@ -114,6 +114,12 @@ creating the data.  This combined with Tiled's
 make for a very game-engine-like development process for Command X16 game
 development.
 
-## Video Demonstration
+## Video Demonstrations
+
+Tools Overview:
 
 [![Tools Demo](https://img.youtube.com/vi/ATiwyTGiSc4/0.jpg)](https://www.youtube.com/watch?v=ATiwyTGiSc4)
+
+Collision Detection:
+
+[![Collision Detection](https://img.youtube.com/vi/HCEfZ3UPACM/0.jpg)](https://www.youtube.com/watch?v=HCEfZ3UPACM)
