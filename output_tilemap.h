@@ -14,10 +14,10 @@ class OutputTilemap
 		Tilemap *tilemap;
 };
 
-class OutputTilemapException
+class OutputTilemapException : public TilemapException
 {
 	public:
-		OutputTilemapException(const std::string &message): message(message) { }
+		OutputTilemapException(const std::string &message): TilemapException(message) { }
 		std::string message;
 
 };

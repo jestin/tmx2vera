@@ -73,10 +73,10 @@ int main(int argc, char **argv)
 
 	std::cout << "Generating " << args.args[1] << " from '" << args.layer_name << "' layer of " << args.args[0] << "...";
 
+	OutputTilemap *outputMap;
 
 	try {
 		Tilemap map(args.args[0]);
-		OutputTilemap *outputMap;
 
 		if(args.collision)
 		{
@@ -91,9 +91,13 @@ int main(int argc, char **argv)
 
 		delete outputMap;
 	}
-	catch(const TilemapFileException& e)
+	catch(const TilemapException& e)
 	{
 		std::cerr << "Exception caught: " << e.message << std::endl;
+
+		if(outputMap) {
+			delete outputMap;
+		}
 	}
 
 	std::cout << "Done" << std::endl;
