@@ -58,11 +58,11 @@ void VeraTilemap::writeFile(const std::string &filename, const std::string &laye
 
 			if(!disable_paloffset && firstgid - prev_firstgid > 0)
 			{
-				paloffset = rawTile / (firstgid - prev_firstgid);
+				paloffset = (rawTile & 0x00FFFFFF) / (firstgid - prev_firstgid);
 
 				// account for the last tile in the row, which will get bumped
 				// to the next palette
-				if(rawTile % (firstgid - prev_firstgid) == 0)
+				if((rawTile & 0x00FFFFFF) % (firstgid - prev_firstgid) == 0)
 				{
 					paloffset--;
 				}
