@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void CollisionTilemap::writeFile(const std::string &filename, const std::string &layername, const int &disable_paloffset) const
+void CollisionTilemap::writeFile(const std::string &filename, const std::string &layername, const int &disable_paloffset, const int &use_header) const
 {
 	Layer *layer = tilemap->Layers()[std::string(layername)];
 
@@ -34,8 +34,10 @@ void CollisionTilemap::writeFile(const std::string &filename, const std::string 
 		throw CollisionTilemapFileException( "Collision maps must be 32/64/128/256 tiles high");
 	}
 
-	// write out 2 byte header
-	file << (uint8_t)0 << (uint8_t)0;
+	if(use_header) {
+		// write out 2 byte header
+		file << (uint8_t)0 << (uint8_t)0;
+	}
 
 	for (uint32_t y = 0; y < height; ++y) {
 		for (uint32_t x = 0; x < width; ++x) {

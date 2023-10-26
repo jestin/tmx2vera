@@ -45,6 +45,7 @@ Commander X16 computer
                              2 byte per tile VERA tile map
   -d, --disable-paloffset    Do not write a palette offset to the tile data
   -l, --layer=LAYER_NAME     The name of the layer to convert
+  -u, --use-header           Write a 2-byte header to output files
   -?, --help                 Give this help list
       --usage                Give a short usage message
   -V, --version              Print program version
@@ -114,7 +115,25 @@ creating the data.  This combined with Tiled's
 make for a very game-engine-like development process for Command X16 game
 development.
 
+### Two Byte File Header (`-u`)
+
+Files loaded into memory on Commodore computers (and Commodore-like computers
+such as the Commander X16) have historically used a two byte header to indicate
+the address in memory where the file is expected to be loaded.  Many BASIC
+commands on these computers expect this header when dealing with files.  While
+the Commander X16's BASIC commands (such as `LOAD` and `VLOAD`) also expect
+this header, altenative commands have been added that do not require it.  For
+this reason, the `--use-header` option has been added to `tmx2vera` in order to
+generate files that can work with both standards.  By default, headers will not
+be added, but `tmx2vera` can be told to place two bytes of 0s at the beginning
+of an output file by specifying `--use-header` or `-u` at the command line.
+
 ## Video Demonstrations
+
+_These videos use the older convention of adding a two byte header to the
+output by default.  The current version of `tmx2vera` will not add the header
+by default, and therefore would be incompatible with some of the code examples
+in these old videos._
 
 Tools Overview:
 

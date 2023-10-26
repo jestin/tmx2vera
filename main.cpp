@@ -17,6 +17,7 @@ static struct argp_option options[] = {
 	{"layer", 'l', "LAYER_NAME", 0, "The name of the layer to convert"},
 	{"collision", 'c', 0, 0, "Output a 1 byte per tile collision map instead of 2 byte per tile VERA tile map"},
 	{"disable-paloffset", 'd', 0, 0, "Do not write a palette offset to the tile data"},
+	{"use-header", 'u', 0, 0, "Write a 2-byte header to output files"},
 	{ 0 }
 };
 
@@ -26,6 +27,7 @@ struct arguments
 	char *layer_name;
 	int collision = 0;
 	int disable_paloffset = 0;
+	int use_header = 0;
 };
 
 static error_t parse_opt(int key, char *arg, struct argp_state *state)
@@ -42,6 +44,9 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
 			break;
 		case 'd':
 			args->disable_paloffset = 1;
+			break;
+		case 'u':
+			args->use_header = 1;
 			break;
 		case ARGP_KEY_ARG:
 			if(state->arg_num >= 2)
@@ -87,7 +92,7 @@ int main(int argc, char **argv)
 			outputMap = new VeraTilemap(&map);
 		}
 
-		outputMap->writeFile(args.args[1], std::string(args.layer_name), args.disable_paloffset);
+		outputMap->writeFile(args.args[1], std::string(args.layer_name), args.disable_paloffset, args.use_header);
 
 		delete outputMap;
 	}
